@@ -1,50 +1,14 @@
+//src/routes/router.ts
 import { IncomingMessage, ServerResponse } from 'http';
-import { getUsers, getUser, createUserHandler, updateUserHandler, deleteUserHandler } from '../controllers/userController';
+import {
+  getUsers,
+  getUser,
+  createUserHandler,
+  updateUserHandler,
+  deleteUserHandler,
+} from '../controllers/userController';
 
-type RouteHandler = (req: IncomingMessage, res: ServerResponse, params: Record<string, string>) => void;
-
-interface Route {
-  method: string;
-  path: string;
-  handler: RouteHandler;
-}
-
-const routes: Route[] = [
-  { method: 'GET', path: '/api/users', handler: getUsers },
-  { method: 'GET', path: '/api/users/:id', handler: getUser },
-  { method: 'POST', path: '/api/users', handler: createUserHandler },
-  { method: 'PUT', path: '/api/users/:id', handler: updateUserHandler },
-  { method: 'DELETE', path: '/api/users/:id', handler: deleteUserHandler },
-];
-
-const matchRoute = (method: string, url: string): { handler: RouteHandler; params: Record<string, string> } | null => {
-  for (const route of routes) {
-    if (route.method === method) {
-      const pathPattern = route.path.replace(/:\w+/g, '([^/]+)');
-      const regex = new RegExp(`^${pathPattern}$`);
-      const match = url.match(regex);
-      if (match) {
-        const params: Record<string, string> = {};
-        const keys = route.path.match(/:\w+/g);
-        if (keys) {
-          keys.forEach((key, index) => {
-            const paramValue = match[index + 1];
-            if (paramValue !== undefined) {
-              params[key.substring(1)] = paramValue;
-            }
-          });
-        }
-        return {
-          handler: route.handler,
-          params,
-        };
-      }
-    }
-  }
-  return null;
-};
-
-export const router = (req: IncomingMessage, res: ServerResponse): void => {
+export const router = (req: IncomingMessage, res: ServerResponse, store: any): void => {
   const { method, url } = req;
 
   if (!url) {
@@ -53,10 +17,34 @@ export const router = (req: IncomingMessage, res: ServerResponse): void => {
     return;
   }
 
-  const route = matchRoute(method!, url);
-
-  if (route) {
-    route.handler(req, res, route.params);
+  if (method === 'GET' && url === '/api/users') {
+    getUsers(store)(req, res);
+  } else if (method === 'GET' && /^\/api\/users\/\w+$/.test(url)) {
+    const id = url.split('/')[3];
+    if (id) {
+      getUser(store)(req, res, { id });
+    } else {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ message: 'Invalid ID' }));
+    }
+  } else if (method === 'POST' && url === '/api/users') {
+    createUserHandler(store)(req, res);
+  } else if (method === 'PUT' && /^\/api\/users\/\w+$/.test(url)) {
+    const id = url.split('/')[3];
+    if (id) {
+      updateUserHandler(store)(req, res, { id });
+    } else {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ message: 'Invalid ID' }));
+    }
+  } else if (method === 'DELETE' && /^\/api\/users\/\w+$/.test(url)) {
+    const id = url.split('/')[3];
+    if (id) {
+      deleteUserHandler(store)(req, res, { id });
+    } else {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ message: 'Invalid ID' }));
+    }
   } else {
     res.writeHead(404, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ message: 'Route not found' }));
