@@ -2,10 +2,12 @@
   "name": "simple-crud-api",
   "version": "1.0.0",
   "description": "Simple CRUD API RS School",
-  "main": "index.ts",
-  "scripts": {
-    "start:dev": "cross-env NODE_ENV=development ts-node-dev src/index.ts"
-  },
+  "main": "dist/bundle.js",
+"scripts": {
+  "start:dev": "cross-env NODE_ENV=development ts-node-dev --respawn --transpile-only src/index.ts",
+  "start:prod": "cross-env NODE_ENV=production ts-node src/index.ts",
+  "start:multi": "cross-env NODE_ENV=production ts-node src/cluster.ts"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
