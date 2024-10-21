@@ -1,0 +1,37 @@
+{
+	"collectCoverage": true,
+	"coverageThreshold": {
+		"global": {
+			"branches": 80,
+			"functions": 80,
+			"lines": 80,
+			"statements": 80
+		}
+	},
+	"testTimeout": 10000,
+	"verbose": true,
+	"testEnvironment": "node",
+	"testPathIgnorePatterns": [
+		"/node_modules/"
+	],
+	"testMatch": [
+		"**/?(*.)+(test).ts"
+	],
+	"moduleFileExtensions": [
+		"ts",
+		"js",
+		"json"
+	],
+	"moduleNameMapper": {
+		"^axios$": "axios"
+	},
+	"restoreMocks": true,
+	"resetMocks": true,
+	"moduleDirectories": [
+		"node_modules",
+		"<rootDir>/src"
+	],
+	"transform": {
+		"^.+\\.ts?$": "ts-jest"
+	}
+}
