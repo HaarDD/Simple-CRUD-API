@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // src/controllers/userController.ts
 import { IncomingMessage, ServerResponse } from 'http';
 import { createUser, User } from '../models/User';

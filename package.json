@@ -4,8 +4,9 @@
   "description": "Simple CRUD API RS School",
   "main": "dist/bundle.js",
 "scripts": {
-  "start:dev": "cross-env NODE_ENV=development ts-node-dev --respawn --transpile-only src/index.ts",
-  "start:prod": "cross-env NODE_ENV=production ts-node src/index.ts",
+  "start:dev": "cross-env NODE_ENV=development ts-node-dev --respawn --transpile-only src/singleport.ts",
+  "start:prod": "cross-env NODE_ENV=production ts-node src/singleport.ts",
+  "start:multidev": "cross-env NODE_ENV=development ts-node-dev --respawn --transpile-only src/cluster.ts",
   "start:multi": "cross-env NODE_ENV=production ts-node src/cluster.ts"
 },
   "keywords": [],

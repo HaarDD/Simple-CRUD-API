@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 //src/routes/router.ts
 import { IncomingMessage, ServerResponse } from 'http';
 import {
@@ -19,7 +20,7 @@ export const router = (req: IncomingMessage, res: ServerResponse, store: any): v
 
   if (method === 'GET' && url === '/api/users') {
     getUsers(store)(req, res);
-  } else if (method === 'GET' && /^\/api\/users\/\w+$/.test(url)) {
+  } else if (method === 'GET' && /^\/api\/users\/[\w-]+$/.test(url)) {
     const id = url.split('/')[3];
     if (id) {
       getUser(store)(req, res, { id });
@@ -29,7 +30,7 @@ export const router = (req: IncomingMessage, res: ServerResponse, store: any): v
     }
   } else if (method === 'POST' && url === '/api/users') {
     createUserHandler(store)(req, res);
-  } else if (method === 'PUT' && /^\/api\/users\/\w+$/.test(url)) {
+  } else if (method === 'PUT' && /^\/api\/users\/[\w-]+$/.test(url)) {
     const id = url.split('/')[3];
     if (id) {
       updateUserHandler(store)(req, res, { id });
@@ -37,7 +38,7 @@ export const router = (req: IncomingMessage, res: ServerResponse, store: any): v
       res.writeHead(400, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ message: 'Invalid ID' }));
     }
-  } else if (method === 'DELETE' && /^\/api\/users\/\w+$/.test(url)) {
+  } else if (method === 'DELETE' && /^\/api\/users\/[\w-]+$/.test(url)) {
     const id = url.split('/')[3];
     if (id) {
       deleteUserHandler(store)(req, res, { id });
