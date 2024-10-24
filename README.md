@@ -1,2 +1,2 @@
 # Simple-CRUD-API
-Simple CRUD API RS School
+Please, check the dev branch: [https://github.com/HaarDD/Simple-CRUD-API/tree/dev](https://github.com/HaarDD/Simple-CRUD-API/tree/dev)
